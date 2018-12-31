@@ -4,4 +4,4 @@
 
 本仓库使用[SM.MS](https://sm.ms/)公共图床API。
 
-![github.gif](https://i.loli.net/2018/12/31/5c29b0c0cc4bd.gif)
+![github.gif](https://i.loli.net/2018/12/31/5c29c08f45e7b.gif)
