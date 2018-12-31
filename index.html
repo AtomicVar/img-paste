@@ -97,7 +97,7 @@
         if (request.readyState === 4) {
           r = JSON.parse(request.response);
           if (r.code == 'success') {
-            stat.innerText = '上传完成！（点我复制）Markdown 地址：![图片](' + r.data.url + ')';
+            stat.innerText = '上传完成！（点我复制）Markdown 地址：![图片](' + r.data.url + ')' + '  删除链接:' + r.data.delete + '请妥善保管好你的所有链接';
             urlString = '![图片](' + r.data.url + ')';
           } else {
             stat.innerText = '上传失败！';
