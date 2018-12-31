@@ -9,7 +9,12 @@
       max-width: 500px;
     }
 
-    #status {
+    #status:hover {
+      background-color: black;
+      color: white;
+    }
+
+    #url {
       color: red;
     }
   </style>
@@ -17,11 +22,12 @@
 
 <body>
   <p>通过 Ctrl + V 将图片粘贴 - <a href="https://github.com/ZJUGuoShuai/img-paste">项目地址</a></p>
-  <p id="status"></p>
+  <p><span id="status"></span><br><span id="url"></span></p>
   <p id="copyStatus"></p>
   <img id="img" src="" alt="" />
   <script>
     var stat = document.getElementById('status');
+    var url = document.getElementById('url');
     var copyStat = document.getElementById('copyStatus');
     var copyBtn = document.getElementById('copy');
     var urlString = "";
@@ -97,7 +103,8 @@
         if (request.readyState === 4) {
           r = JSON.parse(request.response);
           if (r.code == 'success') {
-            stat.innerText = '上传完成！（点我复制）Markdown 地址：![图片](' + r.data.url + ')' + '  删除链接:' + r.data.delete + '请妥善保管好你的所有链接';
+            stat.innerText = '上传完成！（点我复制）Markdown 地址';
+            url.innerText = 'Markdown： ![图片](' + r.data.url + ')' + '  删除链接:' + r.data.delete + '请妥善保管好你的所有链接 ';
             urlString = '![图片](' + r.data.url + ')';
           } else {
             stat.innerText = '上传失败！';
