@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>图片粘贴</title>
+  <style>
+    #img {
+      max-width: 500px;
+    }
+
+    #status {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <p>通过Ctrl + v将图片粘贴</p>
+  <p id="status"></p>
+  <img id="img" src="" alt="" />
+  <script>
+    var stat = document.getElementById('status');
+    var count = 1;
+
+    function updateProgress(oEvent) {
+      if (oEvent.lengthComputable) {
+        var percentComplete = oEvent.loaded / oEvent.total * 100;
+        stat.innerText = '上传进度：' + percentComplete;
+      } else { // Unable to compute progress information since the total size is unknown 
+      }
+    }
+
+    function transferFailed(evt) {
+      stat.innerText = '上传失败';
+    }
+
+
+    function transferCanceled(evt) {
+      stat.innerText = '进度取消';
+    }
+
+    document.addEventListener("paste", function (event) {
+      if (event.clipboardData || event.originalEvent) {
+        var clipboardData =
+          event.clipboardData || event.originalEvent.clipboardData;
+        if (clipboardData.items) {
+          var blob;
+          for (let i = 0; i < clipboardData.items.length; i++) {
+            if (clipboardData.items[i].type.indexOf("image") !== -1) {
+              blob = clipboardData.items[i].getAsFile();
+            }
+          }
+        }
+      }
+      var render = new FileReader();
+      render.onload = function (evt) {
+        //输出base64编码
+        var base64 = evt.target.result;
+        document.getElementById('img').setAttribute('src', base64);
+      }
+      render.readAsDataURL(blob);
+
+      var formData = new FormData();
+      formData.append("smfile", blob);
+
+      var request = new XMLHttpRequest();
+      request.addEventListener("progress", updateProgress);
+      request.addEventListener("error", transferFailed);
+      request.addEventListener("abort", transferCanceled);
+
+      request.onreadystatechange = function () {
+        if (request.readyState === 4) {
+          r = JSON.parse(request.response);
+          if (r.code == 'success') {
+            stat.innerText = '上传完成！Markdown 地址：![图片](' + r.data.url + ')';
+          }
+          else {
+            stat.innerText = '上传失败！';
+          }
+        }
+      }
+      request.open("POST", "https://sm.ms/api/upload");
+      request.send(formData);
+    });
+  </script>
+</body>
+
+</html>
