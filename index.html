@@ -16,7 +16,7 @@
 </head>
 
 <body>
-  <p>通过 Ctrl + V 将图片粘贴，点击页面任何位置将链接markdown格式复制到系统剪贴板 - <a href="https://github.com/ZJUGuoShuai/img-paste">项目地址</a></p>
+  <p>通过 Ctrl + V 将图片粘贴 - <a href="https://github.com/ZJUGuoShuai/img-paste">项目地址</a></p>
   <p id="status"></p>
   <p id="copyStatus"></p>
   <img id="img" src="" alt="" />
@@ -78,7 +78,12 @@
         var base64 = evt.target.result;
         document.getElementById('img').setAttribute('src', base64);
       }
-      render.readAsDataURL(blob);
+      try {
+        render.readAsDataURL(blob);
+      } catch (error) {
+        stat.innerHTML = '抱歉！您粘贴的不是图片。';
+        return;
+      }
 
       var formData = new FormData();
       formData.append("smfile", blob);
@@ -92,7 +97,7 @@
         if (request.readyState === 4) {
           r = JSON.parse(request.response);
           if (r.code == 'success') {
-            stat.innerText = '上传完成！Markdown 地址：![图片](' + r.data.url + ')';
+            stat.innerText = '上传完成！（点我复制）Markdown 地址：![图片](' + r.data.url + ')';
             urlString = '![图片](' + r.data.url + ')';
           } else {
             stat.innerText = '上传失败！';
@@ -103,7 +108,7 @@
       request.send(formData);
     });
 
-    document.addEventListener('click', copyToClipboard);
+    stat.addEventListener('click', copyToClipboard);
   </script>
 </body>
 
