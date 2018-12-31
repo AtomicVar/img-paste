@@ -16,12 +16,29 @@
 </head>
 
 <body>
-  <p>通过Ctrl + v将图片粘贴</p>
+  <p>通过 Ctrl + V 将图片粘贴，点击页面任何位置将链接markdown格式复制到系统剪贴板 - <a href="https://github.com/ZJUGuoShuai/img-paste">项目地址</a></p>
   <p id="status"></p>
+  <p id="copyStatus"></p>
   <img id="img" src="" alt="" />
   <script>
     var stat = document.getElementById('status');
-    var count = 1;
+    var copyStat = document.getElementById('copyStatus');
+    var copyBtn = document.getElementById('copy');
+    var urlString = "";
+
+    const copyToClipboard = () => {
+      if (urlString == "") {
+          copyStat.innerText = '请先粘贴图片生成链接';
+          return;
+      }
+  const el = document.createElement('textarea');
+  el.value = urlString;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+  copyStat.innerText = '已复制到系统剪贴板';
+};
 
     function updateProgress(oEvent) {
       if (oEvent.lengthComputable) {
@@ -41,6 +58,8 @@
     }
 
     document.addEventListener("paste", function (event) {
+      copyStat.innerText = '';
+
       if (event.clipboardData || event.originalEvent) {
         var clipboardData =
           event.clipboardData || event.originalEvent.clipboardData;
@@ -74,6 +93,7 @@
           r = JSON.parse(request.response);
           if (r.code == 'success') {
             stat.innerText = '上传完成！Markdown 地址：![图片](' + r.data.url + ')';
+            urlString = '![图片]('+r.data.url+')';
           }
           else {
             stat.innerText = '上传失败！';
@@ -83,6 +103,8 @@
       request.open("POST", "https://sm.ms/api/upload");
       request.send(formData);
     });
+
+    document.addEventListener('click', copyToClipboard);
   </script>
 </body>
 
