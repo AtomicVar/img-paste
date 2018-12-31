@@ -28,17 +28,17 @@
 
     const copyToClipboard = () => {
       if (urlString == "") {
-          copyStat.innerText = '请先粘贴图片生成链接';
-          return;
+        copyStat.innerText = '请先粘贴图片生成链接';
+        return;
       }
-  const el = document.createElement('textarea');
-  el.value = urlString;
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand('copy');
-  document.body.removeChild(el);
-  copyStat.innerText = '已复制到系统剪贴板';
-};
+      const el = document.createElement('textarea');
+      el.value = urlString;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      copyStat.innerText = '已复制到系统剪贴板';
+    };
 
     function updateProgress(oEvent) {
       if (oEvent.lengthComputable) {
@@ -93,9 +93,8 @@
           r = JSON.parse(request.response);
           if (r.code == 'success') {
             stat.innerText = '上传完成！Markdown 地址：![图片](' + r.data.url + ')';
-            urlString = '![图片]('+r.data.url+')';
-          }
-          else {
+            urlString = '![图片](' + r.data.url + ')';
+          } else {
             stat.innerText = '上传失败！';
           }
         }
