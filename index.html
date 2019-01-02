@@ -1,122 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <title>图片粘贴</title>
-  <style>
-    #img {
-      max-width: 500px;
-    }
-
-    #status:hover {
-      background-color: black;
-      color: white;
-    }
-
-    #url {
-      color: red;
-    }
-  </style>
-</head>
-
-<body>
-  <p>通过 Ctrl + V 将图片粘贴 - <a href="https://github.com/ZJUGuoShuai/img-paste">项目地址</a></p>
-  <p><span id="status"></span><br><span id="url"></span></p>
-  <p id="copyStatus"></p>
-  <img id="img" src="" alt="" />
-  <script>
-    var stat = document.getElementById('status');
-    var url = document.getElementById('url');
-    var copyStat = document.getElementById('copyStatus');
-    var copyBtn = document.getElementById('copy');
-    var urlString = "";
-
-    const copyToClipboard = () => {
-      if (urlString == "") {
-        copyStat.innerText = '请先粘贴图片生成链接';
-        return;
+  <head>
+    <meta charset="UTF-8" />
+    <title>图片粘贴</title>
+    <style>
+      #img {
+        max-width: 500px;
       }
-      const el = document.createElement('textarea');
-      el.value = urlString;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand('copy');
-      document.body.removeChild(el);
-      copyStat.innerText = '已复制到系统剪贴板';
-    };
 
-    function updateProgress(oEvent) {
-      if (oEvent.lengthComputable) {
-        var percentComplete = oEvent.loaded / oEvent.total * 100;
-        stat.innerText = '上传进度：' + percentComplete;
-      } else { // Unable to compute progress information since the total size is unknown 
+      #status:hover {
+        background-color: black;
+        color: white;
       }
-    }
 
-    function transferFailed(evt) {
-      stat.innerText = '上传失败';
-    }
+      #url {
+        color: red;
+      }
+    </style>
+  </head>
 
+  <body>
+    <p>
+      通过 Ctrl + V 将图片粘贴 -
+      <a href="https://github.com/ZJUGuoShuai/img-paste">项目地址</a>
+    </p>
+    <p><span id="status"></span><br /><span id="url"></span></p>
+    <p id="copyStatus"></p>
+    <img id="img" src="" alt="" />
+    <script>
+      var stat = document.getElementById("status");
+      var url = document.getElementById("url");
+      var copyStat = document.getElementById("copyStatus");
+      var copyBtn = document.getElementById("copy");
+      var urlString = "";
 
-    function transferCanceled(evt) {
-      stat.innerText = '进度取消';
-    }
+      const copyToClipboard = () => {
+        if (urlString == "") {
+          copyStat.innerText = "请先粘贴图片生成链接";
+          return;
+        }
+        const el = document.createElement("textarea");
+        el.value = urlString;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+        copyStat.innerText = "已复制到系统剪贴板";
+      };
 
-    document.addEventListener("paste", function (event) {
-      copyStat.innerText = '';
+      function updateProgress(oEvent) {
+        if (oEvent.lengthComputable) {
+          var percentComplete = (oEvent.loaded / oEvent.total) * 100;
+          stat.innerText = "上传进度：" + percentComplete;
+        } else {
+          // Unable to compute progress information since the total size is unknown
+        }
+      }
 
-      if (event.clipboardData || event.originalEvent) {
-        var clipboardData =
-          event.clipboardData || event.originalEvent.clipboardData;
-        if (clipboardData.items) {
-          var blob;
-          for (let i = 0; i < clipboardData.items.length; i++) {
-            if (clipboardData.items[i].type.indexOf("image") !== -1) {
-              blob = clipboardData.items[i].getAsFile();
+      function transferFailed(evt) {
+        stat.innerText = "上传失败";
+      }
+
+      function transferCanceled(evt) {
+        stat.innerText = "进度取消";
+      }
+
+      document.addEventListener("paste", function(event) {
+        copyStat.innerText = "";
+
+        if (event.clipboardData || event.originalEvent) {
+          var clipboardData =
+            event.clipboardData || event.originalEvent.clipboardData;
+          if (clipboardData.items) {
+            var blob;
+            for (let i = 0; i < clipboardData.items.length; i++) {
+              if (clipboardData.items[i].type.indexOf("image") !== -1) {
+                blob = clipboardData.items[i].getAsFile();
+              }
             }
           }
         }
-      }
-      var render = new FileReader();
-      render.onload = function (evt) {
-        //输出base64编码
-        var base64 = evt.target.result;
-        document.getElementById('img').setAttribute('src', base64);
-      }
-      try {
-        render.readAsDataURL(blob);
-      } catch (error) {
-        stat.innerHTML = '抱歉！您粘贴的不是图片。';
-        return;
-      }
-
-      var formData = new FormData();
-      formData.append("smfile", blob);
-
-      var request = new XMLHttpRequest();
-      request.addEventListener("progress", updateProgress);
-      request.addEventListener("error", transferFailed);
-      request.addEventListener("abort", transferCanceled);
-
-      request.onreadystatechange = function () {
-        if (request.readyState === 4) {
-          r = JSON.parse(request.response);
-          if (r.code == 'success') {
-            stat.innerText = '上传完成！（点我复制）Markdown 地址';
-            url.innerText = 'Markdown： ![图片](' + r.data.url + ')' + '  删除链接:' + r.data.delete + '请妥善保管好你的所有链接 ';
-            urlString = '![图片](' + r.data.url + ')';
-          } else {
-            stat.innerText = '上传失败！';
-          }
+        var render = new FileReader();
+        render.onload = function(evt) {
+          //输出base64编码
+          var base64 = evt.target.result;
+          document.getElementById("img").setAttribute("src", base64);
+        };
+        try {
+          render.readAsDataURL(blob);
+        } catch (error) {
+          stat.innerHTML = "抱歉！您粘贴的不是图片。";
+          return;
         }
-      }
-      request.open("POST", "https://sm.ms/api/upload");
-      request.send(formData);
-    });
 
-    stat.addEventListener('click', copyToClipboard);
-  </script>
-</body>
+        var formData = new FormData();
+        formData.append("smfile", blob);
 
+        var request = new XMLHttpRequest();
+        request.addEventListener("progress", updateProgress);
+        request.addEventListener("error", transferFailed);
+        request.addEventListener("abort", transferCanceled);
+
+        request.onreadystatechange = function() {
+          if (request.readyState === 4) {
+            r = JSON.parse(request.response);
+            if (r.code == "success") {
+              stat.innerText = "上传完成！（点我复制）Markdown 地址";
+              url.innerText =
+                "Markdown： ![图片](" +
+                r.data.url +
+                ")" +
+                "  删除链接:" +
+                r.data.delete +
+                "请妥善保管好你的所有链接 ";
+              urlString = "![图片](" + r.data.url + ")";
+            } else {
+              stat.innerText = "上传失败！";
+            }
+          }
+        };
+        request.open("POST", "https://sm.ms/api/upload");
+        request.send(formData);
+      });
+
+      stat.addEventListener("click", copyToClipboard);
+    </script>
+  </body>
 </html>
