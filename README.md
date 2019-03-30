@@ -8,4 +8,4 @@
 
 ![github.gif](https://i.loli.net/2019/03/30/5c9f2ea0bfc04.gif)
 
-基于 *Boostrap* 和 *Vue* 构建前端页面。
+基于 *Bootstrap* 和 *Vue* 构建前端页面。
