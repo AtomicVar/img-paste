@@ -1,4 +1,4 @@
-# IMG-Paste
+# [IMG-Paste](https://zjuguoshuai.github.io/img-paste/)
 
 直接粘贴图片（QQ截图/浏览器截图/系统截图）获得外链，自动生成 Markdown 图片格式并复制到系统剪贴板。
 
