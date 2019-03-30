@@ -84,7 +84,7 @@ document.addEventListener("paste", function (event) {
             if (r.code == "success") {
                 app.status = "[OK] Upload finished.";
                 app.alertType = 'alert-success';
-                app.url = "![img](" + r.data.url + ")";
+                app.url = "![](" + r.data.url + ")";
                 app.copyBtnDisable = false;
             } else {
                 app.status = "[Error] Upload failed.";
@@ -95,5 +95,3 @@ document.addEventListener("paste", function (event) {
     request.open("POST", "https://sm.ms/api/upload");
     request.send(formData);
 });
-
-// stat.addEventListener("click", copyToClipboard);
