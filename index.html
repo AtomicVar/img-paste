@@ -1,129 +1,102 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>图片粘贴</title>
-    <style>
-      #img {
-        max-width: 500px;
-      }
 
-      #status:hover {
-        background-color: black;
-        color: white;
-      }
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-      #url {
-        color: red;
-      }
-    </style>
-  </head>
+    <link rel="stylesheet" href="style.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-  <body>
-    <p>
-      通过 Ctrl + V 将图片粘贴 -
-      <a href="https://github.com/ZJUGuoShuai/img-paste">项目地址</a>
-    </p>
-    <p><span id="status"></span><br /><span id="url"></span></p>
-    <p id="copyStatus"></p>
-    <img id="img" src="" alt="" />
-    <script>
-      var stat = document.getElementById("status");
-      var url = document.getElementById("url");
-      var copyStat = document.getElementById("copyStatus");
-      var copyBtn = document.getElementById("copy");
-      var urlString = "";
+    <!-- Font-awesome CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
-      const copyToClipboard = () => {
-        if (urlString == "") {
-          copyStat.innerText = "请先粘贴图片生成链接";
-          return;
-        }
-        const el = document.createElement("textarea");
-        el.value = urlString;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand("copy");
-        document.body.removeChild(el);
-        copyStat.innerText = "已复制到系统剪贴板";
-      };
+    <title>IMG-Paste</title>
+</head>
 
-      function updateProgress(oEvent) {
-        if (oEvent.lengthComputable) {
-          var percentComplete = (oEvent.loaded / oEvent.total) * 100;
-          stat.innerText = "上传进度：" + percentComplete;
-        } else {
-          // Unable to compute progress information since the total size is unknown
-        }
-      }
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-black">
+        <div class="container w-80">
+            <a class="navbar-brand" href="#">IMG-Paste</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-      function transferFailed(evt) {
-        stat.innerText = "上传失败";
-      }
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="about.html"><i class="fas fa-question-circle"></i> About</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="https://github.com/ZJUGuoShuai/img-paste"><i
+                                class="fab fa-github"></i>
+                            GitHub</a>
+                    </li>
+                </ul>
+            </div>
 
-      function transferCanceled(evt) {
-        stat.innerText = "进度取消";
-      }
+        </div>
+    </nav>
 
-      document.addEventListener("paste", function(event) {
-        copyStat.innerText = "";
+    <!-- Body -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div id="prompt" class="card">
+                    <h3 class="card-title py-3 text-center">Press <kbd>Ctrl</kbd> + <kbd>V</kbd> to paste your
+                        screenshot here.</h3>
+                    <img id="img" src="img-placeholder.svg" alt="" />
+                    <div id="app" class="card-body">
+                        <p id="status" class="card-text alert w-50" v-bind:class="alertType">Status: <b>{{ status }}</b>
+                        </p>
+                        <p id="url" class="card-text alert alert-primary w-50"> URL: <b>{{ url }}</b></p>
+                        <div class="text-center">
+                            <button id="copy-btn" type="button" class="btn btn-default" v-on:click="copyToClip"
+                                :disabled="copyBtnDisable">Copy Markdown Link</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        if (event.clipboardData || event.originalEvent) {
-          var clipboardData =
-            event.clipboardData || event.originalEvent.clipboardData;
-          if (clipboardData.items) {
-            var blob;
-            for (let i = 0; i < clipboardData.items.length; i++) {
-              if (clipboardData.items[i].type.indexOf("image") !== -1) {
-                blob = clipboardData.items[i].getAsFile();
-              }
-            }
-          }
-        }
-        var render = new FileReader();
-        render.onload = function(evt) {
-          //输出base64编码
-          var base64 = evt.target.result;
-          document.getElementById("img").setAttribute("src", base64);
-        };
-        try {
-          render.readAsDataURL(blob);
-        } catch (error) {
-          stat.innerHTML = "抱歉！您粘贴的不是图片。";
-          return;
-        }
+    <!-- Footer -->
+    <!-- Footer -->
+    <footer class="fixed-bottom text-muted">
+        <!-- Copyright -->
+        <div class="text-center py-1 bg-black">© 2019 Copyright:
+            <a href="https://github.com/ZJUGuoShuai" class="text-white"> ZJUGuoShuai</a>
+            | Based on <a href="https://sm.ms/" class="text-white">SM.MS API</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
 
-        var formData = new FormData();
-        formData.append("smfile", blob);
 
-        var request = new XMLHttpRequest();
-        request.addEventListener("progress", updateProgress);
-        request.addEventListener("error", transferFailed);
-        request.addEventListener("abort", transferCanceled);
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
-        request.onreadystatechange = function() {
-          if (request.readyState === 4) {
-            r = JSON.parse(request.response);
-            if (r.code == "success") {
-              stat.innerText = "上传完成！（点我复制）Markdown 地址";
-              url.innerText =
-                "Markdown： ![图片](" +
-                r.data.url +
-                ")" +
-                "  删除链接:" +
-                r.data.delete +
-                "请妥善保管好你的所有链接 ";
-              urlString = "![图片](" + r.data.url + ")";
-            } else {
-              stat.innerText = "上传失败！";
-            }
-          }
-        };
-        request.open("POST", "https://sm.ms/api/upload");
-        request.send(formData);
-      });
+    <!-- main.js -->
+    <script src="main.js"></script>
 
-      stat.addEventListener("click", copyToClipboard);
-    </script>
-  </body>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
 </html>

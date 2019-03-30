@@ -1,0 +1,30 @@
+body {
+    padding-bottom: 70px;
+}
+
+footer {
+    color: white;
+}
+
+.bg-black {
+    background-color: #000;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-style: italic;
+}
+
+a.nav-link:hover{
+    border-bottom: 0.2em solid white;
+    margin-bottom: -0.2em;
+}
+
+#img {
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.alert {
+    margin: auto; display: table;
+}
