@@ -15,6 +15,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <link rel="manifest" href="assets/site.webmanifest">
+    <link rel="mask-icon" href="assets/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
     <title>IMG-Paste</title>
 </head>
 
@@ -53,7 +60,7 @@
                 <div id="prompt" class="card">
                     <h3 class="card-title py-3 text-center">Press <kbd>Ctrl</kbd> + <kbd>V</kbd> to paste your
                         screenshot here.</h3>
-                    <img id="img" src="img-placeholder.svg" alt="" />
+                    <img id="img" src="assets/img-placeholder.svg" alt="" />
                     <div id="app" class="card-body">
                         <p id="status" class="card-text alert w-50" v-bind:class="alertType">Status: <b>{{ status }}</b>
                         </p>
