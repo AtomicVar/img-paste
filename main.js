@@ -1,4 +1,4 @@
-var app = new Vue({
+let app = new Vue({
   el: "#app",
   data: {
     status: "Ready.",
@@ -41,15 +41,15 @@ function transferCanceled(evt) {
 }
 
 document.addEventListener("paste", function(event) {
+  let blob;
   app.status = "Processing...";
   app.alertType = "alert-warning";
   app.copyBtnDisable = true;
 
   if (event.clipboardData || event.originalEvent) {
-    var clipboardData =
+    let clipboardData =
       event.clipboardData || event.originalEvent.clipboardData;
     if (clipboardData.items) {
-      var blob;
       for (let i = 0; i < clipboardData.items.length; i++) {
         if (clipboardData.items[i].type.indexOf("image") !== -1) {
           blob = clipboardData.items[i].getAsFile();
@@ -57,9 +57,9 @@ document.addEventListener("paste", function(event) {
       }
     }
   }
-  var render = new FileReader();
+  let render = new FileReader();
   render.onload = function(evt) {
-    var base64 = evt.target.result;
+    let base64 = evt.target.result;
     document.getElementById("img").setAttribute("src", base64);
   };
   try {
@@ -70,10 +70,10 @@ document.addEventListener("paste", function(event) {
     return;
   }
 
-  var formData = new FormData();
+  let formData = new FormData();
   formData.append("smfile", blob);
 
-  var request = new XMLHttpRequest();
+  let request = new XMLHttpRequest();
   request.addEventListener("progress", updateProgress);
   request.addEventListener("error", transferFailed);
   request.addEventListener("abort", transferCanceled);
