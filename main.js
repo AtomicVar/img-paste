@@ -7,7 +7,7 @@ let app = new Vue({
     copyBtnDisable: true
   },
   methods: {
-    copyToClip: function() {
+    copyToClip: () => {
       let el = document.createElement("textarea");
       el.value = app.url;
       document.body.appendChild(el);
@@ -19,28 +19,7 @@ let app = new Vue({
   }
 });
 
-function updateProgress(e) {
-  if (e.lengthComputable) {
-    let percent = (e.loaded / e.total) * 100;
-    app.status = `Upload: ${percent} %`;
-    app.alertType = "alert-warning";
-  } else {
-    app.status = "Uploading";
-    app.alertType = "alert-warning";
-  }
-}
-
-function transferFailed(evt) {
-  app.status = "[Error] Upload failed.";
-  app.alertType = "alert-danger";
-}
-
-function transferCanceled(evt) {
-  app.status = "[Warning] Upload cancelled.";
-  app.alertType = "alert-warning";
-}
-
-document.addEventListener("paste", function(event) {
+document.addEventListener("paste", event => {
   let blob;
   app.status = "Processing...";
   app.alertType = "alert-warning";
@@ -58,8 +37,8 @@ document.addEventListener("paste", function(event) {
     }
   }
   let render = new FileReader();
-  render.onload = function(evt) {
-    let base64 = evt.target.result;
+  render.onload = event => {
+    let base64 = event.target.result;
     document.getElementById("img").setAttribute("src", base64);
   };
   try {
@@ -73,25 +52,22 @@ document.addEventListener("paste", function(event) {
   let formData = new FormData();
   formData.append("smfile", blob);
 
-  let request = new XMLHttpRequest();
-  request.addEventListener("progress", updateProgress);
-  request.addEventListener("error", transferFailed);
-  request.addEventListener("abort", transferCanceled);
-
-  request.onreadystatechange = function() {
-    if (request.readyState === 4) {
-      r = JSON.parse(request.response);
+  axios
+    .post("https://sm.ms/api/upload", formData)
+    .then(response => {
+      r = response.data;
       if (r.code == "success") {
         app.status = "[OK] Upload finished.";
         app.alertType = "alert-success";
-        app.url = "![](" + r.data.url + ")";
+        app.url = `![](${r.data.url})`;
         app.copyBtnDisable = false;
       } else {
-        app.status = "[Error] Upload failed.";
+        app.status = `[Error: ${r.msg}] Upload failed. `;
         app.alertType = "alert-danger";
       }
-    }
-  };
-  request.open("POST", "https://sm.ms/api/upload");
-  request.send(formData);
+    })
+    .catch(error => {
+      app.status = `[Error: ${error}] Upload failed. `;
+      app.alertType = "alert-danger";
+    });
 });
