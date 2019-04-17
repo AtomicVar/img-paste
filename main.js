@@ -1,3 +1,5 @@
+"use strict";
+
 let app = new Vue({
   el: "#app",
   data: {
@@ -55,7 +57,7 @@ document.addEventListener("paste", event => {
   axios
     .post("https://sm.ms/api/upload", formData)
     .then(response => {
-      r = response.data;
+      let r = response.data;
       if (r.code == "success") {
         app.status = "[OK] Upload finished.";
         app.alertType = "alert-success";
