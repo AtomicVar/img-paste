@@ -18,7 +18,7 @@ let app = new Vue({
       document.execCommand("copy");
       document.body.removeChild(el);
       app.status = "[OK] Markdown Link Copied to system clipboard.";
-    }
+    },
 	deletecopyToClip: () => {
       let el = document.createElement("textarea");
       el.value = app.deleteurl;
