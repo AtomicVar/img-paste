@@ -10,7 +10,7 @@ let app = new Vue({
     copyBtnDisable: true
   },
   methods: {
-    copyToClip: () => {
+    markdowncopyToClip: () => {
       let el = document.createElement("textarea");
       el.value = app.url;
       document.body.appendChild(el);
