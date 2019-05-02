@@ -5,6 +5,7 @@ let app = new Vue({
   data: {
     status: "Ready.",
     url: "None.",
+    deleteurl: "None.",
     alertType: "alert-success",
     copyBtnDisable: true
   },
@@ -62,6 +63,7 @@ document.addEventListener("paste", event => {
         app.status = "[OK] Upload finished.";
         app.alertType = "alert-success";
         app.url = `![](${r.data.url})`;
+        app.deleteurl = `${r.data.delete}`;
         app.copyBtnDisable = false;
       } else {
         app.status = `[Error: ${r.msg}] Upload failed. `;
