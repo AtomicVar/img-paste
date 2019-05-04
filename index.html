@@ -56,12 +56,12 @@
     <!-- Body -->
     <div class="container">
         <div class="row">
-            <div class="col">
+            <div class="col" id="app">
                 <div id="prompt" class="card">
-                    <h3 class="card-title py-3 text-center">Press <kbd>Ctrl</kbd> + <kbd>V</kbd> to paste your
+                    <h3 class="card-title py-3 text-center">Press <kbd>{{controls}}</kbd> + <kbd>V</kbd> to paste your
                         screenshot here.</h3>
                     <img id="img" src="assets/img-placeholder.svg" alt="" />
-                    <div id="app" class="card-body">
+                    <div class="card-body">
                         <p id="status" class="card-text alert w-50" v-bind:class="alertType">Status: <b>{{ status }}</b>
                         </p>
                         <p id="url" class="card-text alert alert-primary w-50"> URL: <b>{{ url }}</b></p>
