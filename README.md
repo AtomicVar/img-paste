@@ -14,6 +14,7 @@
 - Windows 10 系统截图（<kbd>Win</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>）
 - Firefox 自带截图
 - Flameshot 截图
+- macOS 系统截图（<kbd>⌘</kbd>+<kbd>⌃</kbd>+<kbd>⇧</kbd>+<kbd>3</kbd>/<kbd>4</kbd>）
 
 基于 *Bootstrap* 和 *Vue* 构建前端页面。
 
