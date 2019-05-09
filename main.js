@@ -5,18 +5,28 @@ let app = new Vue({
   data: {
     status: "Ready.",
     url: "None.",
+    deleteurl: "None.",
     alertType: "alert-success",
     copyBtnDisable: true
   },
   methods: {
-    copyToClip: () => {
+    markdowncopyToClip: () => {
       let el = document.createElement("textarea");
       el.value = app.url;
       document.body.appendChild(el);
       el.select();
       document.execCommand("copy");
       document.body.removeChild(el);
-      app.status = "[OK] Copied to system clipboard.";
+      app.status = "[OK] Markdown Link Copied to system clipboard.";
+    },
+	deletecopyToClip: () => {
+      let el = document.createElement("textarea");
+      el.value = app.deleteurl;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      app.status = "[OK] Delete Link copied to system clipboard.";
     }
   }
 });
@@ -62,6 +72,7 @@ document.addEventListener("paste", event => {
         app.status = "[OK] Upload finished.";
         app.alertType = "alert-success";
         app.url = `![](${r.data.url})`;
+        app.deleteurl = `${r.data.delete}`;
         app.copyBtnDisable = false;
       } else {
         app.status = `[Error: ${r.msg}] Upload failed. `;

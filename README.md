@@ -16,3 +16,7 @@
 - Flameshot 截图
 
 基于 *Bootstrap* 和 *Vue* 构建前端页面。
+
+## 替代品
+
+如果遇到 SM.MS 访问速度不稳或加载失败，可以选择 [im.sb](https://im.sb/)，此图床也支持粘贴截图上传。
