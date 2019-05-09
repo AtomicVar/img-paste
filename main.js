@@ -9,6 +9,14 @@ let app = new Vue({
     alertType: "alert-success",
     copyBtnDisable: true
   },
+  computed: {
+    controls: () => {
+      if (navigator.platform === "MacIntel") {
+        return "⌘";
+      }
+      return "Ctrl";
+    }
+  },
   methods: {
     markdowncopyToClip: () => {
       let el = document.createElement("textarea");
