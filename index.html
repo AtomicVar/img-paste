@@ -65,23 +65,20 @@
                         <p id="status" class="card-text alert w-50" v-bind:class="alertType">Status: <b>{{ status }}</b>
                         </p>
                         <p id="url" class="card-text alert alert-primary w-50"> URL: <b>{{ url }}</b></p>
+                        <p id="delete-url" class="card-text alert alert-danger w-50">Delete URL:
+                            <b>{{ deleteurl }}</b><br>请妥善保管好您的所有链接~</p>
                         <div class="text-center">
                             <button id="copy-btn" type="button" class="btn btn-default" v-on:click="markdowncopyToClip"
-                                :disabled="copyBtnDisable">Copy Markdown Link</a>
-                        </div>
-                        <p id="deleteurl" class="card-text alert alert-primary w-50"> DELETEURL: <b>{{ deleteurl }}</b></p>
-                        <div class="text-center">
+                                :disabled="copyBtnDisable">Copy Markdown Link</button>
                             <button id="copy-btn" type="button" class="btn btn-default" v-on:click="deletecopyToClip"
-                                :disabled="copyBtnDisable">Copy Delete Link</a>
+                                :disabled="copyBtnDisable">Copy Delete Link</button>
                         </div>
-                        <p id="注意" class="card-text alert alert-primary w-50"> 请妥善保管好您的所有链接~</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <!-- Footer -->
     <footer class="fixed-bottom text-muted">
         <!-- Copyright -->
